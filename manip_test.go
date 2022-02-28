@@ -6,23 +6,9 @@ package nune_test
 
 import (
 	"testing"
-	"time"
 
 	"github.com/vorduin/nune"
 )
-
-func benchmarkMicro(b *testing.B, f func()) {
-	b.ResetTimer()
-
-	start := time.Now()
-	for i := 0; i < b.N; i++ {
-		f()
-	}
-	execTime := time.Since(start)
-
-	b.ReportMetric(0, "ns/op")
-	b.ReportMetric((1e6*execTime.Seconds())/float64(b.N), "μs/op")
-}
 
 func BenchmarkCast1e6(b *testing.B) {
 	tensor := nune.Range[float64](0, 1e6, 1)

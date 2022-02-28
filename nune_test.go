@@ -52,7 +52,7 @@ func benchmarkOp(b *testing.B, f func()) {
 
 	b.Run("1e7Float64ProcsN", func(b *testing.B) {
 		nune.EnvConfig.NumCPU = 0
-		
+
 		benchmarkMilli(b, func() {
 			f()
 		})
