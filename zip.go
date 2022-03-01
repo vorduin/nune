@@ -10,21 +10,29 @@ import (
 )
 
 // handleZip processes an elementwise operation accordingly.
-func handleZip[T Number](lhs, rhs, out []T, f func(T, T) T, nCPU int) {
+func handleZip[T Number](lhs, rhs Tensor[T], f func(T, T) T, nCPU int) {
+	if lhs.Rank() == 0 {
+		lhs.Ravel()[0] = f(lhs.Ravel()[0], rhs.Ravel()[0])
+	}
+
 	var wg sync.WaitGroup
 
 	for i := 0; i < nCPU; i++ {
-		min := (i * len(lhs) / nCPU)
-		max := ((i + 1) * len(lhs)) / nCPU
+		min := (i * lhs.Size(0) / nCPU)
+		max := ((i + 1) * lhs.Size(0)) / nCPU
 
 		wg.Add(1)
-		go func(lhsBuf, rhsBuf, outBuf []T) {
-			for j := 0; j < len(lhsBuf); j++ {
-				outBuf[j] = f(lhsBuf[j], rhsBuf[j])
+		go func(t1, t2 Tensor[T]) {
+			it1, it2 := t1.Iter(), t2.Iter()
+			for j := 0; j < it1.Size(); j++ {
+				n1, _ := it1.Next()
+				n2, _ := it2.Next()
+
+				n1.Ravel()[0] = f(n1.Ravel()[0], n2.Ravel()[0])
 			}
 
 			wg.Done()
-		}(lhs[min:max], rhs[min:max], out[min:max])
+		}(lhs.Slice(min, max), rhs.Slice(min, max))
 	}
 
 	wg.Wait()
@@ -82,7 +90,7 @@ func (t Tensor[T]) Zip(other any, f func(T, T) T) Tensor[T] {
 			t = t.Broadcast(s...)
 		}
 
-		if s := midwayBroadcast(t.Shape(), o.Shape()); o.Broadable(s...) && !slices.Equal(s, o.shape) {
+		if s := midwayBroadcast(t.shape, o.shape); o.Broadable(s...) && !slices.Equal(s, o.shape) {
 			o = o.Broadcast(s...)
 		}
 
@@ -96,8 +104,7 @@ func (t Tensor[T]) Zip(other any, f func(T, T) T) Tensor[T] {
 		}
 	}
 
-	// TODO: Fix if the Tensor was permutated.
-	handleZip(t.Ravel(), o.Ravel(), t.Ravel(), f, configCPU(t.Numel()))
+	handleZip(t, o, f, configCPU(t.Numel()))
 
 	return t
 }

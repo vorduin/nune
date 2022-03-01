@@ -6,35 +6,29 @@ package nune_test
 
 import (
 	"testing"
+
+	"github.com/vorduin/nune"
 )
 
 func BenchmarkAdd(b *testing.B) {
-	tensor := newTensor()
-
-	benchmarkOp(b, func() {
+	benchmarkOp(b, func(tensor nune.Tensor[TestsT]) {
 		tensor.Add(tensor)
 	})
 }
 func BenchmarkSub(b *testing.B) {
-	tensor := newTensor()
-
-	benchmarkOp(b, func() {
+	benchmarkOp(b, func(tensor nune.Tensor[TestsT]) {
 		tensor.Sub(tensor)
 	})
 }
 
 func BenchmarkMul(b *testing.B) {
-	tensor := newTensor()
-
-	benchmarkOp(b, func() {
+	benchmarkOp(b, func(tensor nune.Tensor[TestsT]) {
 		tensor.Mul(tensor)
 	})
 }
 
 func BenchmarkDiv(b *testing.B) {
-	tensor := newTensor()
-
-	benchmarkOp(b, func() {
+	benchmarkOp(b, func(tensor nune.Tensor[TestsT]) {
 		tensor.Div(tensor)
 	})
 }

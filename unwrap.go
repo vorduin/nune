@@ -39,7 +39,7 @@ func unwrapAny[T Number](s []any, shape []int) ([]T, []int, error) {
 			}
 		}
 
-		shape = append(shape, len(s)*d)
+		shape = append(shape, d)
 
 		return unwrapAny[T](p, shape)
 	}
@@ -63,36 +63,36 @@ func anyIsNumeric(a any) bool {
 func anyToNumeric[T Number](s ...any) []T {
 	switch s[0].(type) {
 	case int:
-		return numericToNumeric[T, int](s)
+		return TestsToNumeric[T, int](s)
 	case int8:
-		return numericToNumeric[T, int8](s)
+		return TestsToNumeric[T, int8](s)
 	case int16:
-		return numericToNumeric[T, int16](s)
+		return TestsToNumeric[T, int16](s)
 	case int32:
-		return numericToNumeric[T, int32](s)
+		return TestsToNumeric[T, int32](s)
 	case int64:
-		return numericToNumeric[T, int64](s)
+		return TestsToNumeric[T, int64](s)
 	case uint:
-		return numericToNumeric[T, uint](s)
+		return TestsToNumeric[T, uint](s)
 	case uint8:
-		return numericToNumeric[T, uint8](s)
+		return TestsToNumeric[T, uint8](s)
 	case uint16:
-		return numericToNumeric[T, uint16](s)
+		return TestsToNumeric[T, uint16](s)
 	case uint32:
-		return numericToNumeric[T, uint32](s)
+		return TestsToNumeric[T, uint32](s)
 	case uint64:
-		return numericToNumeric[T, uint64](s)
+		return TestsToNumeric[T, uint64](s)
 	case float32:
-		return numericToNumeric[T, float32](s)
+		return TestsToNumeric[T, float32](s)
 	case float64:
-		return numericToNumeric[T, float64](s)
+		return TestsToNumeric[T, float64](s)
 	default:
 		return nil
 	}
 }
 
-// numericToNumeric casts a numeric type to another numeric type.
-func numericToNumeric[T, U Number](s []any) []T {
+// TestsToNumeric casts a numeric type to another numeric type.
+func TestsToNumeric[T, U Number](s []any) []T {
 	ns := slices.WithLen[T](len(s))
 	for i := 0; i < len(s); i++ {
 		ns[i] = T(s[i].(U))

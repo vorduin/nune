@@ -8,6 +8,15 @@ import (
 	"github.com/vorduin/slices"
 )
 
+// Iter returns an Iterator over the Tensor's data,
+// following the Tensor's indexing scheme.
+func (t Tensor[T]) Iter() Iterator[T] {
+	return Iterator[T]{
+		tensor: t,
+		indices: slices.WithLen[int](len(t.shape)),
+	}
+}
+
 // Ravel returns the Tensor's view in its data buffer.
 func (t Tensor[T]) Ravel() []T {
 	return t.data[t.offset : t.offset+t.Numel()]

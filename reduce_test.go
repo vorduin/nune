@@ -6,44 +6,36 @@ package nune_test
 
 import (
 	"testing"
+
+	"github.com/vorduin/nune"
 )
 
 func BenchmarkMin(b *testing.B) {
-	tensor := newTensor()
-
-	benchmarkOp(b, func() {
+	benchmarkOp(b, func(tensor nune.Tensor[TestsT]) {
 		tensor.Min()
 	})
 }
 
 func BenchmarkMax(b *testing.B) {
-	tensor := newTensor()
-
-	benchmarkOp(b, func() {
+	benchmarkOp(b, func(tensor nune.Tensor[TestsT]) {
 		tensor.Max()
 	})
 }
 
 func BenchmarkMean(b *testing.B) {
-	tensor := newTensor()
-
-	benchmarkOp(b, func() {
+	benchmarkOp(b, func(tensor nune.Tensor[TestsT]) {
 		tensor.Mean()
 	})
 }
 
 func BenchmarkSum(b *testing.B) {
-	tensor := newTensor()
-
-	benchmarkOp(b, func() {
+	benchmarkOp(b, func(tensor nune.Tensor[TestsT]) {
 		tensor.Sum()
 	})
 }
 
 func BenchmarkProd(b *testing.B) {
-	tensor := newTensor()
-
-	benchmarkOp(b, func() {
+	benchmarkOp(b, func(tensor nune.Tensor[TestsT]) {
 		tensor.Prod()
 	})
 }

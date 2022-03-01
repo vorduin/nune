@@ -14,8 +14,12 @@ import (
 func configStride(shape []int) []int {
 	if len(shape) != 0 {
 		stride := slices.WithLen[int](len(shape))
-		stride[0] = slices.Prod(shape[1:])
-
+		if len(shape) == 1 {
+			stride[0] = 1
+		} else {
+			stride[0] = slices.Prod(shape[1:])
+		}
+		
 		for i := 1; i < len(shape); i++ {
 			stride[i] = stride[i-1] / shape[i]
 		}

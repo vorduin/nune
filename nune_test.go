@@ -37,24 +37,28 @@ func benchmarkMilli(b *testing.B, f func()) {
 	b.ReportMetric((1e3*execTime.Seconds())/float64(b.N), "ms/op")
 }
 
-func newTensor() nune.Tensor[float64] {
-	return nune.Range[float64](0, 1e7, 1)
+type TestsT float64
+
+func newTensor() nune.Tensor[TestsT] {
+	return nune.Range[TestsT](0, 1e7, 1)
 }
 
-func benchmarkOp(b *testing.B, f func()) {
+func benchmarkOp(b *testing.B, f func(nune.Tensor[TestsT])) {
 	b.Run("1e7Float64Procs1", func(b *testing.B) {
 		nune.EnvConfig.NumCPU = 1
+		tensor := newTensor()
 
 		benchmarkMilli(b, func() {
-			f()
+			f(tensor)
 		})
 	})
 
 	b.Run("1e7Float64ProcsN", func(b *testing.B) {
 		nune.EnvConfig.NumCPU = 0
-		
+		tensor := newTensor()
+
 		benchmarkMilli(b, func() {
-			f()
+			f(tensor)
 		})
 	})
 }
