@@ -1,5 +1,3 @@
-github.com/vorduin/slices v1.0.5 h1:Da/TQyk+1xd6lBpVMx2PwMnplOP43pPiNVpGsg/nztg=
-github.com/vorduin/slices v1.0.5/go.mod h1:KN1SK0SrEsHQbrA48xrLKpr60I4+qfY89ABCxmX2h5w=
 github.com/vorduin/slices v1.1.2 h1:+KVwwzJUVp16lytGhUZHm6m00GfJFwk37HQ8SUBphMc=
 github.com/vorduin/slices v1.1.2/go.mod h1:eW5urYsjPejRUuHX3oqO/NopJZ0jeeCYoFVoDq2OgGI=
 golang.org/x/exp v0.0.0-20220218215828-6cf2b201936e h1:iWVPgObh6F4UDtjBLK51zsy5UHTPLQwCmsNjCsbKhQ0=
