@@ -66,85 +66,85 @@ As can be concluded, Nune is exceptionally fast on pointwise and reduction opera
 package main
 
 import (
- "fmt"
- "math"
+	"fmt"
+	"math"
 
- "github.com/vorduin/nune"
+	"github.com/vorduin/nune"
 )
 
 func main() {
- // Nune can use any numeric type's superset
- type Freq float64
+	// Nune can use any numeric type's superset
+	type Freq float64
 
- // or ...strings...
- b := nune.From[byte]("nune's moon")
- nune.FmtConfig.Btoa = true // convert bytes to ASCII
- nune.FmtConfig.Excerpt = 12 // max num of elements formatted in an axis
- fmt.Println(b)
- // Prints:
- //
- // Tensor([n, u, n, e, ', s,  , m, o, o, n])
+	// or ...strings...
+	b := nune.From[byte]("nune's moon")
+	nune.FmtConfig.Btoa = true // convert bytes to ASCII
+	nune.FmtConfig.Excerpt = 12 // max num of elements formatted in an axis
+	fmt.Println(b)
+	// Prints:
+	//
+	// Tensor([n, u, n, e, ', s,  , m, o, o, n])
 
- // Create a rank 1 Tensor from the range (0, 10)
- t := nune.Range[Freq](0, 10, 1)
+	// Create a rank 1 Tensor from the range (0, 10)
+	t := nune.Range[Freq](0, 10, 1)
 
- // Create 10 copies of the Tensor's data, concatenate them,
- // and flip axis 1
- t = t.Repeat(10).Flip(1) // shape is now (10, 10)
+	// Create 10 copies of the Tensor's data, concatenate them,
+	// and flip axis 1
+	t = t.Repeat(10).Flip(1) // shape is now (10, 10)
 
- // Operations between two tensors automatically
- // broadcast the tensor's together
- // here the two tensors' shapes are (4, 25, 1) and (4),
- // so the resulting shape ends up being (4, 25, 4)
- _ = t.Clone().Reshape(4, 25, 1).Add([]int{1, 2, 3, 4}).Permute(1, 0, 2)
+	// Operations between two tensors automatically
+	// broadcast the tensor's together
+	// here the two tensors' shapes are (4, 25, 1) and (4),
+	// so the resulting shape ends up being (4, 25, 4)
+	_ = t.Clone().Reshape(4, 25, 1).Add([]int{1, 2, 3, 4}).Permute(1, 0, 2)
 
- // Nune is designed to work for both libraries
- res := t.Reshape(10)
- if res.Err != nil {
-  panic("i can see the moon")
- }
+	// Nune is designed to work for both libraries
+	res := t.Reshape(10)
+	if res.Err != nil {
+		panic("i can see the moon")
+	}
 
- // or interactively, such as working in
- // a notebooks environment
- nune.EnvConfig.Interactive = true
+	// or interactively, such as working in
+	// a notebooks environment
+	nune.EnvConfig.Interactive = true
 
- // The following line automatically panics
- // res = t.Reshape(10)
+	// The following line automatically panics
+	// res = t.Reshape(10)
 
- // Nune allows you to define custom functions
- // any way you want
- //
- // The following is a pointwise sigmoid function
- // that can be parallelized by nune's backend
- res = t.Map(func(x Freq) Freq {
-  return Freq(1 / (1 + math.Exp(-float64(x))))
- })
+	// Nune allows you to define custom functions
+	// any way you want
+	//
+	// The following is a pointwise sigmoid function
+	// that can be parallelized by nune's backend
+	res = t.Map(func(x Freq) Freq {
+		return Freq(1 / (1 + math.Exp(-float64(x))))
+	})
 
- // or you could use nune's functional API
- res = t.Copysign(-1).Exp().Add(1).Pow(-1)
- // in the above chain, if nune is running
- // in a non-interactive environment and
- // one operation fails, all subsequent
- // operations would fail and would return
- // the original corresponding error.
+	// or you could use nune's functional API
+	res = t.Copysign(-1).Exp().Add(1).Pow(-1)
+	// in the above chain, if nune is running
+	// in a non-interactive environment and
+	// one operation fails, all subsequent
+	// operations would fail and would return
+	// the original corresponding error.
 
- nune.FmtConfig.Excerpt = 4
- nune.FmtConfig.Precision = 2 // num of decimals formatted
+	nune.FmtConfig.Excerpt = 4
+	nune.FmtConfig.Precision = 2 // num of decimals formatted
 
- fmt.Println(res)
- // Prints:
- //
- // Tensor([[0.73, 0.73, ..., 0.68, 0.62]
- //         [0.73, 0.73, ..., 0.68, 0.62]
- //         ...,
- //         [0.73, 0.73, ..., 0.68, 0.62]
- //         [0.73, 0.73, ..., 0.68, 0.62]])
- 
- // and much more!
- // Nune impelements most of the "math" package
- // as Tensor methods, many tensor manipulation functions,
- // and facilities to facilitate and speed up working
- // with and operating on numerical data.
+	fmt.Println(res)
+	// Prints:
+	//
+	// Tensor([[0.73, 0.73, ..., 0.68, 0.62]
+	//         [0.73, 0.73, ..., 0.68, 0.62]
+	//         ...,
+	//         [0.73, 0.73, ..., 0.68, 0.62]
+	//         [0.73, 0.73, ..., 0.68, 0.62]])
+
+	// and much more!
+	// Nune impelements most of the "math" package
+	// as Tensor methods, many tensor manipulation functions,
+	// and facilities to facilitate and speed up working
+	// with and operating on numerical data.
 }
 ```
 
